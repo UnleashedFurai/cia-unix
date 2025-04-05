@@ -1,6 +1,7 @@
 # cia-unix
 
 *Decrypt CIA and 3DS roms in UNIX environments (Linux and macOS)*
+*forked to add support for .cci*
 
 ```
 cia-unix/
