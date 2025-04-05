@@ -30,7 +30,7 @@ def download_dep
 end
 
 # roms presence check
-if Dir["*.cia"].size.zero? && Dir["*.3ds"].size.zero?
+if Dir["*.cia"].size.zero? && Dir["*.3ds"].size.zero? && Dir["*.cci"].size.zero?
     log.delete if File.exists? "cia-unix.log"
     abort "No #{"CIA".colorize.mode(:bold)}/#{"3DS".colorize.mode(:bold)} roms were found."
 end
@@ -97,6 +97,44 @@ Dir["*.3ds"].each do |ds|
     puts "Building decrypted #{dsn} 3DS..."
     log.puts %x[./makerom -f cci -ignoresign -target p -o '#{dsn}-decrypted.3ds' #{args}]
     check_decrypt(dsn, "3ds")
+    remove_cache
+end
+
+# cci decrypting
+Dir["*.cci"].each do |ds|
+    next if ds.includes? "decrypted"
+
+    args = ""
+    i : UInt8 = 0
+    dsn : String = ds.chomp ".cci"
+
+    puts "Decrypting: #{ds.colorize.mode(:bold)}..."
+    log.puts %x[./ctrdecrypt '#{ds}']
+
+    Dir["#{dsn}.*.ncch"].each do |ncch|
+        case ncch
+        when "#{dsn}.Main.ncch"
+            i = 0
+        when "#{dsn}.Manual.ncch"
+            i = 1
+        when "#{dsn}.DownloadPlay.ncch"
+            i = 2
+        when "#{dsn}.Partition4.ncch"
+            i = 3
+        when "#{dsn}.Partition5.ncch"
+            i = 4
+        when "#{dsn}.Partition6.ncch"
+            i = 5
+        when "#{dsn}.N3DSUpdateData.ncch"
+            i = 6
+        when "#{dsn}.UpdateData.ncch"
+            i = 7 
+        end
+        args += "-i '#{ncch}:#{i}:#{i}' "
+    end
+    puts "Building decrypted #{dsn} 3DS..."
+    log.puts %x[./makerom -f cci -ignoresign -target p -o '#{dsn}-decrypted.cci' #{args}]
+    check_decrypt(dsn, "cci")
     remove_cache
 end
 
