@@ -113,21 +113,21 @@ Dir["*.cci"].each do |ds|
 
     Dir["#{dsn}.*.ncch"].each do |ncch|
         case ncch
-        when "#{dsn}.Main.ncch"
+        when "#{dsn}.Main.00000000.ncch"
             i = 0
-        when "#{dsn}.Manual.ncch"
+        when "#{dsn}.Manual.00000001.ncch"
             i = 1
-        when "#{dsn}.DownloadPlay.ncch"
+        when "#{dsn}.DownloadPlay.00000002.ncch"
             i = 2
-        when "#{dsn}.Partition4.ncch"
+        when "#{dsn}.Partition4.00000003.ncch"
             i = 3
-        when "#{dsn}.Partition5.ncch"
+        when "#{dsn}.Partition5.00000004.ncch"
             i = 4
-        when "#{dsn}.Partition6.ncch"
+        when "#{dsn}.Partition6.00000005.ncch"
             i = 5
-        when "#{dsn}.N3DSUpdateData.ncch"
+        when "#{dsn}.N3DSUpdateData.00000006.ncch"
             i = 6
-        when "#{dsn}.UpdateData.ncch"
+        when "#{dsn}.UpdateData.00000007.ncch"
             i = 7 
         end
         args += "-i '#{ncch}:#{i}:#{i}' "
